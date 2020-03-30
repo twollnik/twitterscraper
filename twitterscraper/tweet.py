@@ -45,6 +45,12 @@ class Tweet:
     def from_soup(cls, tweet):
         tweet_div = tweet.find('div', 'tweet')
 
+        # handle emojis
+        text_div = tweet.find('p', 'tweet-text')
+        for img in text_div.findAll("img", "Emoji"):
+            img.replace_with(img.attrs.get("alt", ''))
+        text = text_div.get_text()
+
         # user name & id
         screen_name = tweet_div["data-screen-name"].strip('@')
         username = tweet_div["data-name"]
